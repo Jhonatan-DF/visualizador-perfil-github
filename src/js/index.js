@@ -1,49 +1,25 @@
-const inputSearch = document.getElementById('input-search');
-const btnSearch = document.getElementById('btn-search');
-const profileResults = document.querySelector('.profile-results')
+import { elements, getSearchValue, showLoading, clearProfileResults } from './dom.js';
+import { fetchGitHubUser } from './api.js';
+import { renderUserProfile, renderError } from './renderer.js';
 
+async function handleSearch() {
+  const userName = getSearchValue();
 
-const BASE_URL = 'https://api.github.com'
+  if (!userName) {
+    alert('Por favor, digite um nome de usuário do GitHub');
+    clearProfileResults();
+    return;
+  }
 
-btnSearch.addEventListener('click', async () => {
-    const userName = inputSearch.value;
+  showLoading();
 
+  try {
+    const userData = await fetchGitHubUser(userName);
+    renderUserProfile(userData, elements.profileResults);
+  } catch (error) {
+    console.error('Erro ao buscar o perfil', error);
+    renderError('Usuário não encontrado ou houve um problema na busca.', elements.profileResults);
+  }
+}
 
-
-    if (userName) {
-        profileResults.innerHTML = `<p class="loading">Carregando...</p>`
-
-        try {
-            //aqui voce pode aicionar a logica para usar o valor do input
-            const response = await fetch(`${BASE_URL}/users/${userName}`)
-
-            if (!response.ok) {
-                alert('Usuario não entrado')
-                profileResults.innerHTML = "";
-                return;
-            }
-
-            const userData = await response.json();
-            console.log(userData)
-
-            profileResults.innerHTML = `
-        <div class="profile-card">
-            <img src="${userData.avatar_url}" alt="Avatar de ${userData.name}"class="profile-avatar">
-            <div class="profile-info">
-            <h2 class="profile-name">${userData.name || 'Nome não disponivél'}</h2>
-            <p>${userData.bio || 'não possui bio cadastrada 😒.'}</p>
-            </div>
-        </div>`
-
-        }
-        catch (error) {
-            console.error('erro ao buscar o perfil', error);
-            profileResults.innerHTML = "";
-        }
-
-    } else {
-        alert('por favor, digite um nome de usuário do GitHub')
-        profileResults.innerHTML = "";
-    }
-
-});
+elements.btnSearch.addEventListener('click', handleSearch);
