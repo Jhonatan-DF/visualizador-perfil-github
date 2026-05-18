@@ -141,6 +141,44 @@ main {
   box-shadow: var(--shadow-sm);
 }
 
+.profile-results {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  padding-top: var(--spacing-lg);
+}
+
+.profile-card {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  width: 100%;
+  max-width: 42rem;
+  padding: var(--spacing-lg);
+  text-align: left;
+}
+
+.profile-avatar {
+  width: 6rem;
+  height: 6rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-info {
+  flex: 1;
+}
+
+.profile-info .profile-name {
+  margin: 0 0 0.5rem;
+  font-size: var(--font-xl);
+}
+
+.profile-info p {
+  margin: 0;
+  color: var(--muted-foreground);
+}
+
 .container .profile-results.hide {
   display: none;
 }
