@@ -17,7 +17,7 @@ async function handleSearch() {
     const userData = await fetchGitHubUser(userName);
     const userRepos = await fetchGitHubUserRepos(userName);
     console.log(userRepos)
-    renderUserProfile(userData,userRepos, elements.profileResults);
+    renderUserProfile(userData, userRepos, elements.profileResults);
 
   } catch (error) {
     console.error('Erro ao buscar o perfil', error);
