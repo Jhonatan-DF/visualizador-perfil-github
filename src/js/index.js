@@ -1,6 +1,6 @@
 import { elements, getSearchValue, showLoading, clearProfileResults } from './dom.js';
-import { fetchGitHubUser } from './api.js';
-import { renderUserProfile, renderError } from './renderer.js';
+import { fetchGitHubUser, fetchGitHubUserRepos } from './gitHubApi.js';
+import { renderUserProfile, renderError } from './profileViwers.js';
 
 async function handleSearch() {
   const userName = getSearchValue();
@@ -15,7 +15,10 @@ async function handleSearch() {
 
   try {
     const userData = await fetchGitHubUser(userName);
-    renderUserProfile(userData, elements.profileResults);
+    const userRepos = await fetchGitHubUserRepos(userName);
+    console.log(userRepos)
+    renderUserProfile(userData,userRepos, elements.profileResults);
+
   } catch (error) {
     console.error('Erro ao buscar o perfil', error);
     renderError('Usuário não encontrado ou houve um problema na busca.', elements.profileResults);
